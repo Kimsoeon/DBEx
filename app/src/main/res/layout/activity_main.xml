@@ -78,6 +78,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:lines="13"
+            android:enabled="false"
             />
         <EditText
             android:id="@+id/edit_result_count"
@@ -85,6 +86,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:lines="13"
+            android:enabled="false"
             />
 
     </LinearLayout>
