@@ -55,24 +55,13 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,"저장됨",Toast.LENGTH_LONG).show();
                 edit_group_name.setText("");
                 edit_group_count.setText("");
+                selectTable();
             }
         });
         but_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sqlDB = myHelper.getReadableDatabase();
-                String sql = "select * from idolTable";
-                Cursor cursor = sqlDB.rawQuery(sql, null);
-                String names = "Idol 이름" + "\r\n" + "=======" + "\r\n";
-                String counts = "Idol 인원수" + "\r\n" + "=======" + "\r\n";
-                while(cursor.moveToNext()){
-                    names += cursor.getString(0)+ "\r\n"; //첫번째 컬럼이 index 0
-                    counts += cursor.getInt(1)+ "\r\n";
-                }
-                edit_result_name.setText(names);
-                edit_result_count.setText(counts);
-                cursor.close();
-                sqlDB.close();
+               selectTable();
             }
         });
         but_update.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,"수정됨",Toast.LENGTH_LONG).show();
                 edit_group_name.setText("");
                 edit_group_count.setText("");
+                selectTable();
             }
         });
         but_delete.setOnClickListener(new View.OnClickListener() {
@@ -97,9 +87,26 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,"삭제됨",Toast.LENGTH_LONG).show();
                 edit_group_name.setText("");
                 edit_group_count.setText("");
+                selectTable();
             }
         });
+        selectTable();
 
+    }
+    public void selectTable(){
+        sqlDB = myHelper.getReadableDatabase();
+        String sql = "select * from idolTable";
+        Cursor cursor = sqlDB.rawQuery(sql, null);
+        String names = "Idol 이름" + "\r\n" + "=======" + "\r\n";
+        String counts = "Idol 인원수" + "\r\n" + "=======" + "\r\n";
+        while(cursor.moveToNext()){
+            names += cursor.getString(0)+ "\r\n"; //첫번째 컬럼이 index 0
+            counts += cursor.getInt(1)+ "\r\n";
+        }
+        edit_result_name.setText(names);
+        edit_result_count.setText(counts);
+        cursor.close();
+        sqlDB.close();
     }
     //내부 클래스 생성(Main액티비티에 있는 멤버 필드 사용 가능 = > 코드가 쉬워짐
     class MyDBHelper extends SQLiteOpenHelper{
@@ -121,4 +128,5 @@ public class MainActivity extends AppCompatActivity {
             onCreate(db);
         }
     }
+
 }
