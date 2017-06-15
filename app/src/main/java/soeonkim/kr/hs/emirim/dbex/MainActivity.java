@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    Button but_init, but_insert, but_select, but_modify;
+    Button but_init, but_insert, but_select, but_update;
     EditText edit_group_name,edit_group_count,edit_result_name,edit_result_count;
     MyDBHelper myHelper;
     SQLiteDatabase sqlDB;
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         but_init = (Button)findViewById(R.id.but_init);
         but_insert = (Button)findViewById(R.id.but_insert);
         but_select = (Button)findViewById(R.id.but_select);
-        but_modify = (Button)findViewById(R.id.but_modify);
+        but_update = (Button)findViewById(R.id.but_update);
         edit_group_name = (EditText)findViewById(R.id.edit_group_name);
         edit_group_count = (EditText)findViewById(R.id.edit_group_count);
         edit_result_name = (EditText)findViewById(R.id.edit_result_name);
@@ -74,10 +74,16 @@ public class MainActivity extends AppCompatActivity {
                 sqlDB.close();
             }
         });
-        but_modify.setOnClickListener(new View.OnClickListener() {
+        but_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                sqlDB = myHelper.getWritableDatabase();
+                String sql = "update idolTable set idolCount="+edit_group_count.getText()+" where idolName='" + edit_group_name.getText() + "'";
+                sqlDB.execSQL(sql);
+                sqlDB.close();
+                Toast.makeText(MainActivity.this,"수정됨",Toast.LENGTH_LONG).show();
+                edit_group_name.setText("");
+                edit_group_count.setText("");
             }
         });
 
