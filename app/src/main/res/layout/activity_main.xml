@@ -44,8 +44,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_margin="10dp"
         android:orientation="horizontal"
         android:gravity="center"
       >
@@ -64,6 +63,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="조 회"/>
+        <Button
+            android:id="@+id/but_modify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="수 정"
+            />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

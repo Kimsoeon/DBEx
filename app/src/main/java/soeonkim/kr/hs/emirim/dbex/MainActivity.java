@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    Button but_init, but_insert, but_select;
+    Button but_init, but_insert, but_select, but_modify;
     EditText edit_group_name,edit_group_count,edit_result_name,edit_result_count;
     MyDBHelper myHelper;
     SQLiteDatabase sqlDB;
@@ -23,11 +23,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         but_init = (Button)findViewById(R.id.but_init);
         but_insert = (Button)findViewById(R.id.but_insert);
-        but_select = (Button)findViewById(R.id.but_select)
+        but_select = (Button)findViewById(R.id.but_select);
+        but_modify = (Button)findViewById(R.id.but_modify);
         edit_group_name = (EditText)findViewById(R.id.edit_group_name);
         edit_group_count = (EditText)findViewById(R.id.edit_group_count);
         edit_result_name = (EditText)findViewById(R.id.edit_result_name);
         edit_result_count = (EditText)findViewById(R.id.edit_result_count);
+
 
         //DB생성
         myHelper = new MyDBHelper(this);
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         but_init.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                edit_result_name.setText("");
+                edit_result_count.setText("");
                 sqlDB = myHelper.getWritableDatabase();
                 myHelper.onUpgrade(sqlDB, 1,2);
                 sqlDB.close();
@@ -48,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
                 sqlDB.execSQL(sql);
                 sqlDB.close();
                 Toast.makeText(MainActivity.this,"저장됨",Toast.LENGTH_LONG).show();
+                edit_group_name.setText("");
+                edit_group_count.setText("");
             }
         });
         but_select.setOnClickListener(new View.OnClickListener() {
@@ -59,10 +65,22 @@ public class MainActivity extends AppCompatActivity {
                 String names = "Idol 이름" + "\r\n" + "=======" + "\r\n";
                 String counts = "Idol 인원수" + "\r\n" + "=======" + "\r\n";
                 while(cursor.moveToNext()){
-
+                    names += cursor.getString(0)+ "\r\n"; //첫번째 컬럼이 index 0
+                    counts += cursor.getInt(1)+ "\r\n";
                 }
+                edit_result_name.setText(names);
+                edit_result_count.setText(counts);
+                cursor.close();
+                sqlDB.close();
             }
         });
+        but_modify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
     //내부 클래스 생성(Main액티비티에 있는 멤버 필드 사용 가능 = > 코드가 쉬워짐
     class MyDBHelper extends SQLiteOpenHelper{
@@ -73,13 +91,13 @@ public class MainActivity extends AppCompatActivity {
         // idolTable이라는 이름의 테이블 생성
         @Override
         public void onCreate(SQLiteDatabase db) {
-            String sql = "create table idolTable(idolName text not null primary key, idolCount integer)";
+            String sql = "create table idolTable(idolName text not null primary key, idolCount integer)";//프라이머리키는 중복입력 불가
             db.execSQL(sql);
         }
         // 이미 idolTable이 존재한다면 기존의 테이블을 삭제하고 새로 테이블을 만들 때 호출 (초기화버튼 눌렸을때)
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            String sql = "drop table if exist idolTable";
+            String sql = "drop table if exists idolTable";
             db.execSQL(sql);
             onCreate(db);
         }
